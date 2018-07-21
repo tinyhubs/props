@@ -5,6 +5,7 @@ import (
 	"bufio"
 	"bytes"
 	"unicode"
+	"os"
 )
 
 type SourceProperties struct {
@@ -15,6 +16,16 @@ func NewSourceProperties() *SourceProperties {
 	return &SourceProperties{
 		cache: make(map[string]string),
 	}
+}
+
+func (s *SourceProperties) LoadFile(filename string) error {
+	file, err := os.Open(filename)
+	if nil != err {
+		return err
+	}
+	defer file.Close()
+
+	return s.Load(file)
 }
 
 func (s *SourceProperties) Load(reader io.Reader) error {

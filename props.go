@@ -10,7 +10,7 @@ type Source interface {
 }
 
 type Properties interface {
-	Add(priority uint8, s Source)
+	Add(priority uint8, s Source) Source
 	Find(key string) (string, bool)
 	String(key string, def string) string
 	Int64(key string, def int64) int64
@@ -19,7 +19,7 @@ type Properties interface {
 	Expand(s string) string
 }
 
-func NewProperties() Properties {
+func New() Properties {
 	return &implProperties{
 		items: make([]*implSourceItem, 0, 5),
 	}
@@ -35,7 +35,7 @@ type implProperties struct {
 	items []*implSourceItem
 }
 
-func (p *implProperties) Add(priority uint8, s Source) {
+func (p *implProperties) Add(priority uint8, s Source) Source {
 	newItem := &implSourceItem{
 		priority: int(priority),
 		source:   s,
@@ -46,7 +46,7 @@ func (p *implProperties) Add(priority uint8, s Source) {
 		if int(priority) == p.items[i].priority {
 			newItem.next = p.items[i]
 			p.items[i] = newItem
-			return
+			return s
 		}
 	}
 
@@ -54,6 +54,8 @@ func (p *implProperties) Add(priority uint8, s Source) {
 	sort.Slice(p.items, func(i, j int) bool {
 		return p.items[i].priority < p.items[j].priority
 	})
+
+	return s
 }
 
 func (p implProperties) Find(key string) (string, bool) {
@@ -119,6 +121,5 @@ func (p implProperties) Bool(key string, def bool) bool {
 }
 
 func (p implProperties) Expand(s string) string {
-	//TODO 太困了，先睡觉
 	return s
 }
