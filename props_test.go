@@ -6,7 +6,7 @@ import (
 )
 
 func Test_Default(t *testing.T) {
-	p := New()
+	p := NewProps()
 	src0 := p.Add(0, NewSourceCustom()).(*SourceCustom)
 	src0.Set("a", "1")
 	src0.Set("b", "2")

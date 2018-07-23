@@ -11,11 +11,9 @@ type Source interface {
 	Find(key string) (string, bool)
 }
 
-
 //	Props 定义了配置数据的操作集合.
 //	该接口提供了添加配置数据源，配置项查找，配置项读取，使用配置项扩展变量等多个函数.
 type Props interface {
-
 	//	Add 用于将配置数据源 s，以优先级 priority，添加到 Props 对象中去.
 	Add(priority uint8, s Source) Source
 
@@ -48,7 +46,7 @@ type Props interface {
 	Expand(s string) (string, error)
 }
 
-//	创建一个新的Props
+//	NewProps 用于创建一个新的 Props 对象.
 func NewProps() Props {
 	return &implProps{
 		items: make([]*implSourceItem, 0, 5),
